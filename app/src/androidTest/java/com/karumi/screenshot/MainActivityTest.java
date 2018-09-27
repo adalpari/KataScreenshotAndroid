@@ -101,6 +101,54 @@ public class MainActivityTest extends ScreenshotTest {
     compareScreenshot(activity);
   }
 
+  @Test
+  public void showSuperheroWithLongNameAvenger() {
+    givenSuperHeroesWithName("SuperHero with a really long name and even some surnames", true);
+
+    Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
+  @Test
+  public void showSuperheroWithEmptyNameAvenger() {
+    givenSuperHeroesWithName("", true);
+
+    Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
+  @Test
+  public void showSuperheroWithLongNameNoAvenger() {
+    givenSuperHeroesWithName("SuperHero with a really looooong name and even some surnames and family names", false);
+
+    Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
+  @Test
+  public void showSuperheroWithEmptyNameNoAvenger() {
+    givenSuperHeroesWithName("", false);
+
+    Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
+  private List<SuperHero> givenSuperHeroesWithName(String name, boolean avengers) {
+    List<SuperHero> superHeroes = new LinkedList<>();
+
+    String superHeroDescription = "Description Super Hero - ";
+    SuperHero superHero = new SuperHero(name, null, avengers, superHeroDescription);
+    superHeroes.add(superHero);
+
+    when(repository.getAll()).thenReturn(superHeroes);
+
+    return superHeroes;
+  }
+
   private List<SuperHero> givenThereAreSomeSuperHeroes(int numberOfSuperHeroes, boolean avengers) {
     List<SuperHero> superHeroes = new LinkedList<>();
     for (int i = 0; i < numberOfSuperHeroes; i++) {
