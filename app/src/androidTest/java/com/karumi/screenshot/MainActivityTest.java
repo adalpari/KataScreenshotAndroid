@@ -19,6 +19,7 @@ package com.karumi.screenshot;
 import static org.mockito.Mockito.when;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 
@@ -27,7 +28,10 @@ import com.karumi.screenshot.di.MainModule;
 import com.karumi.screenshot.model.SuperHero;
 import com.karumi.screenshot.model.SuperHeroesRepository;
 import com.karumi.screenshot.ui.view.MainActivity;
+import com.karumi.screenshot.ui.view.SuperHeroViewHolder;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -56,6 +60,11 @@ public class MainActivityTest extends ScreenshotTest {
       new IntentsTestRule<>(MainActivity.class, true, false);
 
   @Mock SuperHeroesRepository repository;
+
+  @Before
+  public void setUp() throws Exception {
+    SuperHeroViewHolder.isRunningUITest = true;
+  }
 
   @Test public void showsEmptyCaseIfThereAreNoSuperHeroes() {
     givenThereAreNoSuperHeroes();
@@ -140,8 +149,7 @@ public class MainActivityTest extends ScreenshotTest {
   private List<SuperHero> givenSuperHeroesWithName(String name, boolean avengers) {
     List<SuperHero> superHeroes = new LinkedList<>();
 
-    String superHeroDescription = "Description Super Hero - ";
-    SuperHero superHero = new SuperHero(name, null, avengers, superHeroDescription);
+    SuperHero superHero = creteSuperHero(name, avengers, "Description Super Hero");
     superHeroes.add(superHero);
 
     when(repository.getAll()).thenReturn(superHeroes);
@@ -149,12 +157,17 @@ public class MainActivityTest extends ScreenshotTest {
     return superHeroes;
   }
 
+  @NonNull
+  private SuperHero creteSuperHero(String name, boolean avengers, String description) {
+    String superHeroDescription = description;
+    return new SuperHero(name, "https://i.annihil.us/u/prod/marvel/i/mg/9/00/537bcb1133fd7.jpg", avengers, superHeroDescription);
+  }
+
   private List<SuperHero> givenThereAreSomeSuperHeroes(int numberOfSuperHeroes, boolean avengers) {
     List<SuperHero> superHeroes = new LinkedList<>();
     for (int i = 0; i < numberOfSuperHeroes; i++) {
       String superHeroName = "SuperHero - " + i;
-      String superHeroDescription = "Description Super Hero - " + i;
-      SuperHero superHero = new SuperHero(superHeroName, null, avengers, superHeroDescription);
+      SuperHero superHero = creteSuperHero(superHeroName, avengers, "Description Super Hero - " + i);
       superHeroes.add(superHero);
       when(repository.getByName(superHeroName)).thenReturn(superHero);
     }
@@ -168,5 +181,10 @@ public class MainActivityTest extends ScreenshotTest {
 
   private MainActivity startActivity() {
     return activityRule.launchActivity(null);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    SuperHeroViewHolder.isRunningUITest = false;
   }
 }

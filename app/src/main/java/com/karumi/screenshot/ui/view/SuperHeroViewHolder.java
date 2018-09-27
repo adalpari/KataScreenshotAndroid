@@ -20,12 +20,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.karumi.screenshot.R;
 import com.karumi.screenshot.model.SuperHero;
 import com.karumi.screenshot.ui.presenter.SuperHeroesPresenter;
 import com.squareup.picasso.Picasso;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class SuperHeroViewHolder extends RecyclerView.ViewHolder {
 
@@ -33,6 +35,8 @@ public class SuperHeroViewHolder extends RecyclerView.ViewHolder {
   @Bind(R.id.iv_super_hero_photo) ImageView photoImageView;
   @Bind(R.id.tv_super_hero_name) TextView nameTextView;
   @Bind(R.id.iv_avengers_badge) View avengersBadgeView;
+
+  public static boolean isRunningUITest = false;
 
   public SuperHeroViewHolder(View itemView, SuperHeroesPresenter presenter) {
     super(itemView);
@@ -59,7 +63,11 @@ public class SuperHeroViewHolder extends RecyclerView.ViewHolder {
     if (photo == null) {
       return;
     }
-    Picasso.with(getContext()).load(photo).fit().centerCrop().into(photoImageView);
+    if (isRunningUITest) {
+      Picasso.with(getContext()).load(R.mipmap.ic_launcher).fit().centerCrop().into(photoImageView);
+    } else {
+      Picasso.with(getContext()).load(photo).fit().centerCrop().into(photoImageView);
+    }
   }
 
   private void renderSuperHeroName(String name) {
