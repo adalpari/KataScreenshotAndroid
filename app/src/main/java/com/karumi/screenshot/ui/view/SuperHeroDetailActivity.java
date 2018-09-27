@@ -32,7 +32,9 @@ import butterknife.Bind;
 
 public class SuperHeroDetailActivity extends BaseActivity implements SuperHeroDetailPresenter.View {
 
-  private static final String SUPER_HERO_NAME_KEY = "super_hero_name_key";
+  public static final String SUPER_HERO_NAME_KEY = "super_hero_name_key";
+
+  public static boolean isRunningUITest = false;
 
   @Inject SuperHeroDetailPresenter presenter;
 
@@ -52,7 +54,12 @@ public class SuperHeroDetailActivity extends BaseActivity implements SuperHeroDe
   }
 
   @Override public void showSuperHero(SuperHero superHero) {
-    Picasso.with(this).load(superHero.getPhoto()).fit().centerCrop().into(superHeroPhotoImageView);
+    if (isRunningUITest) {
+      Picasso.with(this).load(R.mipmap.ic_launcher).fit().centerCrop().into(superHeroPhotoImageView);
+    } else {
+      Picasso.with(this).load(superHero.getPhoto()).fit().centerCrop().into(superHeroPhotoImageView);
+    }
+
     superHeroNameTextView.setText(superHero.getName());
     superHeroDescriptionTextView.setText(superHero.getDescription());
     int avengersBadgeVisibility = superHero.isAvenger() ? View.VISIBLE : View.GONE;
