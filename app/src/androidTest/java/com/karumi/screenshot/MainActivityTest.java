@@ -16,23 +16,27 @@
 
 package com.karumi.screenshot;
 
+import static org.mockito.Mockito.when;
+
 import android.app.Activity;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+
 import com.karumi.screenshot.di.MainComponent;
 import com.karumi.screenshot.di.MainModule;
 import com.karumi.screenshot.model.SuperHero;
 import com.karumi.screenshot.model.SuperHeroesRepository;
 import com.karumi.screenshot.ui.view.MainActivity;
-import it.cosenonjaviste.daggermock.DaggerMockRule;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import static org.mockito.Mockito.when;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import it.cosenonjaviste.daggermock.DaggerMockRule;
 
 public class MainActivityTest extends ScreenshotTest {
 
@@ -55,6 +59,42 @@ public class MainActivityTest extends ScreenshotTest {
 
   @Test public void showsEmptyCaseIfThereAreNoSuperHeroes() {
     givenThereAreNoSuperHeroes();
+
+    Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
+  @Test
+  public void showsOneAvenger() {
+    givenThereAreSomeSuperHeroes(1, true);
+
+    Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
+  @Test
+  public void showsOneNoAvenger() {
+    givenThereAreSomeSuperHeroes(1, false);
+
+    Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
+  @Test
+  public void showsMultipleAvengers() {
+    givenThereAreSomeSuperHeroes(5, true);
+
+    Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
+  @Test
+  public void showsMultipleNoAvengers() {
+    givenThereAreSomeSuperHeroes(5, false);
 
     Activity activity = startActivity();
 
