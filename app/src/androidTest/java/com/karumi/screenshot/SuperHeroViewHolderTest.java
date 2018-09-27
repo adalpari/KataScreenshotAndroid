@@ -21,6 +21,7 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static org.mockito.Mockito.mock;
 
 import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -28,15 +29,40 @@ import com.karumi.screenshot.model.SuperHero;
 import com.karumi.screenshot.ui.presenter.SuperHeroesPresenter;
 import com.karumi.screenshot.ui.view.SuperHeroViewHolder;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SuperHeroViewHolderTest extends ScreenshotTest {
 
-  @Test public void showsAnySuperHero() {
+  @Before
+  public void setUp() throws Exception {
+    SuperHeroViewHolder.isRunningUITest = true;
+  }
+
+  @Test public void showsSuperHero() {
     SuperHero superHero = givenASuperHero();
     SuperHeroViewHolder holder = givenASuperHeroViewHolder();
 
-//    holder.render(superHero);
+    holder.render(superHero, InstrumentationRegistry.getTargetContext());
+
+    compareScreenshot(holder, R.dimen.super_hero_row_height);
+  }
+
+  @Test public void showsAvengerSuperHero() {
+    SuperHero superHero = givenASuperHero();
+    SuperHeroViewHolder holder = givenASuperHeroViewHolder();
+
+    holder.render(superHero, InstrumentationRegistry.getTargetContext());
+
+    compareScreenshot(holder, R.dimen.super_hero_row_height);
+  }
+
+  @Test public void showsrSuperHeroLongName() {
+    SuperHero superHero = givenASuperHeroWithALongName();
+    SuperHeroViewHolder holder = givenASuperHeroViewHolder();
+
+    holder.render(superHero, InstrumentationRegistry.getTargetContext());
 
     compareScreenshot(holder, R.dimen.super_hero_row_height);
   }
@@ -85,5 +111,10 @@ public class SuperHeroViewHolderTest extends ScreenshotTest {
   private SuperHero givenASuperHero(String superHeroName, String superHeroDescription,
       boolean isAvenger) {
     return new SuperHero(superHeroName, null, isAvenger, superHeroDescription);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    SuperHeroViewHolder.isRunningUITest = false;
   }
 }
