@@ -79,7 +79,8 @@ public class SuperHeroDetailActivity extends BaseActivity implements SuperHeroDe
             Picasso.with(this).load(superHero.getPhoto()).fit().centerCrop().into(superHeroPhotoImageView);
         }
 
-        superHeroNameTextView.setText(superHero.getName());
+        String nameToSet = superHero.getName() + (superHero.isAvenger() ? " - Avenger" : "");
+        superHeroNameTextView.setText(nameToSet);
         superHeroDescriptionTextView.setText(superHero.getDescription());
         int avengersBadgeVisibility = superHero.isAvenger() ? View.VISIBLE : View.GONE;
         avengersBadgeView.setVisibility(avengersBadgeVisibility);
