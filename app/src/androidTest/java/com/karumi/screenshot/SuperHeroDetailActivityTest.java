@@ -29,6 +29,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 
 import com.karumi.screenshot.di.MainComponent;
 import com.karumi.screenshot.di.MainModule;
+import com.karumi.screenshot.model.RepositoryConnectionError;
 import com.karumi.screenshot.model.SuperHero;
 import com.karumi.screenshot.model.SuperHeroesRepository;
 import com.karumi.screenshot.ui.view.SuperHeroDetailActivity;
@@ -170,10 +171,23 @@ public class SuperHeroDetailActivityTest extends ScreenshotTest {
     compareScreenshot(activity);
   }
 
+  @Test
+  public void showErrorForInternetConnection() {
+    SuperHero superHero = givenInternetConnection();
+
+    Activity activity = startActivity(superHero);
+
+    compareScreenshot(activity);
+  }
+
   private SuperHero givenSuperHeroesWith(String name, String description, boolean avengers) {
     SuperHero superHero = createSuperhero(name, avengers, description);
 
-    when(repository.getByName(anyString())).thenReturn(superHero);
+    try {
+      when(repository.getByName(anyString())).thenReturn(superHero);
+    } catch (RepositoryConnectionError repositoryConnectionError) {
+      repositoryConnectionError.printStackTrace();
+    }
 
     return superHero;
   }
@@ -187,7 +201,23 @@ public class SuperHeroDetailActivityTest extends ScreenshotTest {
   private SuperHero givenNoSuperhero() {
     SuperHero superHero = createSuperhero(REGULAR_NAME, false, DESCRIPTION);
 
-    when(repository.getByName(anyString())).thenReturn(null);
+    try {
+      when(repository.getByName(anyString())).thenReturn(null);
+    } catch (RepositoryConnectionError repositoryConnectionError) {
+      repositoryConnectionError.printStackTrace();
+    }
+
+    return superHero;
+  }
+
+  private SuperHero givenInternetConnection() {
+    SuperHero superHero = createSuperhero(REGULAR_NAME, false, DESCRIPTION);
+
+    try {
+      when(repository.getByName(anyString())).thenThrow(new RepositoryConnectionError());
+    } catch (RepositoryConnectionError repositoryConnectionError) {
+      repositoryConnectionError.printStackTrace();
+    }
 
     return superHero;
   }

@@ -54,6 +54,8 @@ public class SuperHeroDetailActivity extends BaseActivity implements SuperHeroDe
     View avengersBadgeView;
     @Bind(R.id.tv_empty_case)
     TextView tvEmptyCase;
+    @Bind(R.id.tv_error)
+    TextView tvError;
     @Bind(R.id.recycler_view)
     RelativeLayout mRecyclerView;
 
@@ -86,6 +88,11 @@ public class SuperHeroDetailActivity extends BaseActivity implements SuperHeroDe
     @Override
     public void showSuperHeroNotFound() {
         tvEmptyCase.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showError() {
+        tvError.setVisibility(View.VISIBLE);
     }
 
     public static void open(Context context, String superHeroName) {

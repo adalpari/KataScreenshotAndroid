@@ -25,6 +25,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 
 import com.karumi.screenshot.di.MainComponent;
 import com.karumi.screenshot.di.MainModule;
+import com.karumi.screenshot.model.RepositoryConnectionError;
 import com.karumi.screenshot.model.SuperHero;
 import com.karumi.screenshot.model.SuperHeroesRepository;
 import com.karumi.screenshot.ui.view.MainActivity;
@@ -169,7 +170,11 @@ public class MainActivityTest extends ScreenshotTest {
       String superHeroName = "SuperHero - " + i;
       SuperHero superHero = creteSuperHero(superHeroName, avengers, "Description Super Hero - " + i);
       superHeroes.add(superHero);
-      when(repository.getByName(superHeroName)).thenReturn(superHero);
+      try {
+        when(repository.getByName(superHeroName)).thenReturn(superHero);
+      } catch (RepositoryConnectionError repositoryConnectionError) {
+        repositoryConnectionError.printStackTrace();
+      }
     }
     when(repository.getAll()).thenReturn(superHeroes);
     return superHeroes;

@@ -34,7 +34,7 @@ public class SuperHeroesRepository {
     return superHeroes;
   }
 
-  public SuperHero getByName(String name) {
+  public SuperHero getByName(String name) throws RepositoryConnectionError {
     waitABit();
 
     SuperHero result = null;
