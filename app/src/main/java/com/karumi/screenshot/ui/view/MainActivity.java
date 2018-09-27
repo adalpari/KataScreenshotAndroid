@@ -77,7 +77,7 @@ public class MainActivity extends BaseActivity implements SuperHeroesPresenter.V
   }
 
   private void initializeAdapter() {
-    adapter = new SuperHeroesAdapter(presenter);
+    adapter = new SuperHeroesAdapter(presenter, this);
   }
 
   private void initializeRecyclerView() {

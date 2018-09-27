@@ -161,8 +161,17 @@ public class SuperHeroDetailActivityTest extends ScreenshotTest {
     compareScreenshot(activity);
   }
 
+  @Test
+  public void showEmptyCaseForNotFoundSuperhero() {
+    SuperHero superHero = givenNoSuperhero();
+
+    Activity activity = startActivity(superHero);
+
+    compareScreenshot(activity);
+  }
+
   private SuperHero givenSuperHeroesWith(String name, String description, boolean avengers) {
-    SuperHero superHero = creteSuperHero(name, avengers, description);
+    SuperHero superHero = createSuperhero(name, avengers, description);
 
     when(repository.getByName(anyString())).thenReturn(superHero);
 
@@ -170,9 +179,17 @@ public class SuperHeroDetailActivityTest extends ScreenshotTest {
   }
 
   @NonNull
-  private SuperHero creteSuperHero(String name, boolean avengers, String description) {
+  private SuperHero createSuperhero(String name, boolean avengers, String description) {
     String superHeroDescription = description;
     return new SuperHero(name, "https://i.annihil.us/u/prod/marvel/i/mg/9/00/537bcb1133fd7.jpg", avengers, superHeroDescription);
+  }
+
+  private SuperHero givenNoSuperhero() {
+    SuperHero superHero = createSuperhero(REGULAR_NAME, false, DESCRIPTION);
+
+    when(repository.getByName(anyString())).thenReturn(null);
+
+    return superHero;
   }
 
   private SuperHeroDetailActivity startActivity(SuperHero superHero) {

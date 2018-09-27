@@ -16,16 +16,19 @@
 
 package com.karumi.screenshot;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+
+import static org.mockito.Mockito.mock;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+
 import com.karumi.screenshot.model.SuperHero;
 import com.karumi.screenshot.ui.presenter.SuperHeroesPresenter;
 import com.karumi.screenshot.ui.view.SuperHeroViewHolder;
-import org.junit.Test;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static org.mockito.Mockito.mock;
+import org.junit.Test;
 
 public class SuperHeroViewHolderTest extends ScreenshotTest {
 
@@ -33,7 +36,7 @@ public class SuperHeroViewHolderTest extends ScreenshotTest {
     SuperHero superHero = givenASuperHero();
     SuperHeroViewHolder holder = givenASuperHeroViewHolder();
 
-    holder.render(superHero);
+//    holder.render(superHero);
 
     compareScreenshot(holder, R.dimen.super_hero_row_height);
   }

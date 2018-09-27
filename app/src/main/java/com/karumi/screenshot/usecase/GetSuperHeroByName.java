@@ -42,13 +42,17 @@ public class GetSuperHeroByName {
     final SuperHero superHero = repository.getByName(name);
     new Handler(Looper.getMainLooper()).post(new Runnable() {
       @Override public void run() {
-        callback.onSuperHeroLoaded(superHero);
+        if (superHero == null) {
+          callback.onSuperHeroNotFound();
+        } else {
+          callback.onSuperHeroLoaded(superHero);
+        }
       }
     });
   }
 
   public interface Callback {
-
     void onSuperHeroLoaded(SuperHero superHero);
+    void onSuperHeroNotFound();
   }
 }

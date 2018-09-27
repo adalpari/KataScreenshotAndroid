@@ -42,11 +42,18 @@ public class SuperHeroDetailPresenter extends Presenter<SuperHeroDetailPresenter
         view.hideLoading();
         view.showSuperHero(superHero);
       }
+
+      @Override
+      public void onSuperHeroNotFound() {
+        View view = getView();
+        view.hideLoading();
+        view.showSuperHeroNotFound();
+      }
     });
   }
 
   public interface View extends Presenter.View {
-
     void showSuperHero(SuperHero superHero);
+    void showSuperHeroNotFound();
   }
 }

@@ -16,6 +16,7 @@
 package com.karumi.screenshot.ui.view;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -44,9 +45,9 @@ public class SuperHeroViewHolder extends RecyclerView.ViewHolder {
     ButterKnife.bind(this, itemView);
   }
 
-  public void render(SuperHero superHero) {
+  public void render(SuperHero superHero, Context context) {
     hookListeners(superHero);
-    renderSuperHeroPhoto(superHero.getPhoto());
+    renderSuperHeroPhoto(superHero.getPhoto(), context);
     renderSuperHeroName(superHero.getName());
     renderAvengersBadge(superHero.isAvenger());
   }
@@ -59,12 +60,12 @@ public class SuperHeroViewHolder extends RecyclerView.ViewHolder {
     });
   }
 
-  private void renderSuperHeroPhoto(String photo) {
+  private void renderSuperHeroPhoto(String photo, Context context) {
     if (photo == null) {
       return;
     }
     if (isRunningUITest) {
-      Picasso.with(getContext()).load(R.mipmap.ic_launcher).fit().centerCrop().into(photoImageView);
+      photoImageView.setImageDrawable(ContextCompat.getDrawable(context, R.mipmap.ic_launcher));
     } else {
       Picasso.with(getContext()).load(photo).fit().centerCrop().into(photoImageView);
     }

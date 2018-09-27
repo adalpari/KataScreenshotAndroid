@@ -16,13 +16,16 @@
 
 package com.karumi.screenshot.ui.view;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.karumi.screenshot.R;
 import com.karumi.screenshot.model.SuperHero;
 import com.karumi.screenshot.ui.presenter.SuperHeroesPresenter;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,10 +34,12 @@ class SuperHeroesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private final SuperHeroesPresenter presenter;
   private final List<SuperHero> superHeroes;
+  private Context mContext;
 
-  public SuperHeroesAdapter(SuperHeroesPresenter presenter) {
+  public SuperHeroesAdapter(SuperHeroesPresenter presenter, Context context) {
     this.presenter = presenter;
     this.superHeroes = new ArrayList<>();
+    this.mContext = context;
   }
 
   void addAll(Collection<SuperHero> collection) {
@@ -50,7 +55,7 @@ class SuperHeroesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     SuperHeroViewHolder superHeroViewHolder = (SuperHeroViewHolder) holder;
     SuperHero superHero = superHeroes.get(position);
-    superHeroViewHolder.render(superHero);
+    superHeroViewHolder.render(superHero, mContext);
   }
 
   @Override public int getItemCount() {

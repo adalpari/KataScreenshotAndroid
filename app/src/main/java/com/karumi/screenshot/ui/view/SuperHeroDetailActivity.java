@@ -19,78 +19,101 @@ package com.karumi.screenshot.ui.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.karumi.screenshot.R;
 import com.karumi.screenshot.SuperHeroesApplication;
 import com.karumi.screenshot.model.SuperHero;
 import com.karumi.screenshot.ui.presenter.SuperHeroDetailPresenter;
 import com.squareup.picasso.Picasso;
+
 import javax.inject.Inject;
+
 import butterknife.Bind;
 
 public class SuperHeroDetailActivity extends BaseActivity implements SuperHeroDetailPresenter.View {
 
-  public static final String SUPER_HERO_NAME_KEY = "super_hero_name_key";
+    public static final String SUPER_HERO_NAME_KEY = "super_hero_name_key";
 
-  public static boolean isRunningUITest = false;
+    public static boolean isRunningUITest = false;
 
-  @Inject SuperHeroDetailPresenter presenter;
+    @Inject
+    SuperHeroDetailPresenter presenter;
 
-  @Bind(R.id.iv_super_hero_photo) ImageView superHeroPhotoImageView;
-  @Bind(R.id.tv_super_hero_name) TextView superHeroNameTextView;
-  @Bind(R.id.tv_super_hero_description) TextView superHeroDescriptionTextView;
-  @Bind(R.id.iv_avengers_badge) View avengersBadgeView;
+    @Bind(R.id.iv_super_hero_photo)
+    ImageView superHeroPhotoImageView;
+    @Bind(R.id.tv_super_hero_name)
+    TextView superHeroNameTextView;
+    @Bind(R.id.tv_super_hero_description)
+    TextView superHeroDescriptionTextView;
+    @Bind(R.id.iv_avengers_badge)
+    View avengersBadgeView;
+    @Bind(R.id.tv_empty_case)
+    TextView tvEmptyCase;
+    @Bind(R.id.recycler_view)
+    RelativeLayout mRecyclerView;
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    initializeDagger();
-    initializePresenter();
-  }
-
-  @Override public int getLayoutId() {
-    return R.layout.super_hero_detail_activity;
-  }
-
-  @Override public void showSuperHero(SuperHero superHero) {
-    if (isRunningUITest) {
-      Picasso.with(this).load(R.mipmap.ic_launcher).fit().centerCrop().into(superHeroPhotoImageView);
-    } else {
-      Picasso.with(this).load(superHero.getPhoto()).fit().centerCrop().into(superHeroPhotoImageView);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeDagger();
+        initializePresenter();
     }
 
-    superHeroNameTextView.setText(superHero.getName());
-    superHeroDescriptionTextView.setText(superHero.getDescription());
-    int avengersBadgeVisibility = superHero.isAvenger() ? View.VISIBLE : View.GONE;
-    avengersBadgeView.setVisibility(avengersBadgeVisibility);
-  }
+    @Override
+    public int getLayoutId() {
+        return R.layout.super_hero_detail_activity;
+    }
 
-  public static void open(Context context, String superHeroName) {
-    Intent intent = new Intent(context, SuperHeroDetailActivity.class);
-    intent.putExtra(SUPER_HERO_NAME_KEY, superHeroName);
-    context.startActivity(intent);
-  }
+    @Override
+    public void showSuperHero(SuperHero superHero) {
+        if (isRunningUITest) {
+            superHeroPhotoImageView.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
+        } else {
+            Picasso.with(this).load(superHero.getPhoto()).fit().centerCrop().into(superHeroPhotoImageView);
+        }
 
-  @Override protected void initializeToolbar() {
-    super.initializeToolbar();
-    String superHeroName = getSuperHeroName();
-    setTitle(superHeroName);
-  }
+        superHeroNameTextView.setText(superHero.getName());
+        superHeroDescriptionTextView.setText(superHero.getDescription());
+        int avengersBadgeVisibility = superHero.isAvenger() ? View.VISIBLE : View.GONE;
+        avengersBadgeView.setVisibility(avengersBadgeVisibility);
+    }
 
-  private void initializeDagger() {
-    SuperHeroesApplication app = (SuperHeroesApplication) getApplication();
-    app.getMainComponent().inject(this);
-  }
+    @Override
+    public void showSuperHeroNotFound() {
+        tvEmptyCase.setVisibility(View.VISIBLE);
+    }
 
-  private void initializePresenter() {
-    presenter.setView(this);
-    String name = getSuperHeroName();
-    presenter.setName(name);
-    presenter.initialize();
-  }
+    public static void open(Context context, String superHeroName) {
+        Intent intent = new Intent(context, SuperHeroDetailActivity.class);
+        intent.putExtra(SUPER_HERO_NAME_KEY, superHeroName);
+        context.startActivity(intent);
+    }
 
-  private String getSuperHeroName() {
-    return getIntent().getExtras().getString(SUPER_HERO_NAME_KEY);
-  }
+    @Override
+    protected void initializeToolbar() {
+        super.initializeToolbar();
+        String superHeroName = getSuperHeroName();
+        setTitle(superHeroName);
+    }
+
+    private void initializeDagger() {
+        SuperHeroesApplication app = (SuperHeroesApplication) getApplication();
+        app.getMainComponent().inject(this);
+    }
+
+    private void initializePresenter() {
+        presenter.setView(this);
+        String name = getSuperHeroName();
+        presenter.setName(name);
+        presenter.initialize();
+    }
+
+    private String getSuperHeroName() {
+        return getIntent().getExtras().getString(SUPER_HERO_NAME_KEY);
+    }
 }
