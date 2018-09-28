@@ -50,7 +50,7 @@ public class SuperHeroViewHolderTest extends ScreenshotTest {
   }
 
   @Test public void showsAvengerSuperHero() {
-    SuperHero superHero = givenASuperHero();
+    SuperHero superHero = givenAnAvenger();
     SuperHeroViewHolder holder = givenASuperHeroViewHolder();
 
     holder.render(superHero, InstrumentationRegistry.getTargetContext());
@@ -58,8 +58,17 @@ public class SuperHeroViewHolderTest extends ScreenshotTest {
     compareScreenshot(holder, R.dimen.super_hero_row_height);
   }
 
-  @Test public void showsrSuperHeroLongName() {
-    SuperHero superHero = givenASuperHeroWithALongName();
+  @Test public void showsSuperHeroLongName() {
+    SuperHero superHero = givenASuperHeroWithALongName(false);
+    SuperHeroViewHolder holder = givenASuperHeroViewHolder();
+
+    holder.render(superHero, InstrumentationRegistry.getTargetContext());
+
+    compareScreenshot(holder, R.dimen.super_hero_row_height);
+  }
+
+  @Test public void showsAvengerLongName() {
+    SuperHero superHero = givenASuperHeroWithALongName(true);
     SuperHeroViewHolder holder = givenASuperHeroViewHolder();
 
     holder.render(superHero, InstrumentationRegistry.getTargetContext());
@@ -74,20 +83,7 @@ public class SuperHeroViewHolderTest extends ScreenshotTest {
     return new SuperHeroViewHolder(view, mock(SuperHeroesPresenter.class));
   }
 
-  private SuperHero givenASuperHeroWithALongDescription() {
-    String superHeroName = "Super Hero Name";
-    String superHeroDescription =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt "
-            + "ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation "
-            + "ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in "
-            + "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "
-            + "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
-            + "mollit anim id est laborum.";
-    boolean isAvenger = false;
-    return givenASuperHero(superHeroName, superHeroDescription, isAvenger);
-  }
-
-  private SuperHero givenASuperHeroWithALongName() {
+  private SuperHero givenASuperHeroWithALongName(boolean isAvenger) {
     String superHeroName =
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt "
             + "ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation "
@@ -96,7 +92,6 @@ public class SuperHeroViewHolderTest extends ScreenshotTest {
             + "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
             + "mollit anim id est laborum.";
     String superHeroDescription = "Description Super Hero";
-    boolean isAvenger = false;
     return givenASuperHero(superHeroName, superHeroDescription, isAvenger);
   }
 

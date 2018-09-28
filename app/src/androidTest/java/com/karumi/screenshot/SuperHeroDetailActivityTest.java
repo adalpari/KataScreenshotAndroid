@@ -171,14 +171,14 @@ public class SuperHeroDetailActivityTest extends ScreenshotTest {
     compareScreenshot(activity);
   }
 
-//  @Test
-//  public void showErrorForInternetConnection() {
-//    SuperHero superHero = givenInternetConnection();
-//
-//    Activity activity = startActivity(superHero);
-//
-//    compareScreenshot(activity);
-//  }
+  @Test
+  public void showErrorForInternetConnection() {
+    SuperHero superHero = givenInternetConnection();
+
+    Activity activity = startActivity(superHero);
+
+    compareScreenshot(activity);
+  }
 
   private SuperHero givenSuperHeroesWith(String name, String description, boolean avengers) {
     SuperHero superHero = createSuperhero(name, avengers, description);
